@@ -9,7 +9,7 @@
       "value": "S1"
     },
     "repoURL": {
-      "value": "https://github.com/flecoqui/TestNodeJSWebAppAzureAD.git"
+      "value": "https://github.com/flecoqui/TestNodeJSWebApiAzureAD.git"
     },
     "repoBranch": {
       "value": "master"
@@ -24,10 +24,10 @@
       "value": "M365x175592"
     },
     "configRedirectUrl": {
-      "value": "https://testwebappweb.azurewebsites.net/signin-oidc"
+      "value": "https://testwebapiweb.azurewebsites.net/signin-oidc"
     },
     "configSignOutUrl": {
-      "value": "https://testwebappweb.azurewebsites.net/"
+      "value": "https://testwebapiweb.azurewebsites.net/"
     }
   }
 }

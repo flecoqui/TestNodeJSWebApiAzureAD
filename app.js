@@ -32,23 +32,24 @@ var cookieParser = require('cookie-parser');
 var expressSession = require('express-session');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
-var passport = require('passport');
+//var passport = require('passport');
 var util = require('util');
-var bunyan = require('bunyan');
+//var bunyan = require('bunyan');
 var config = require('./config');
 
 // set up database for express session
+/*
 var MongoStore = require('connect-mongo')(expressSession);
 var mongoose = require('mongoose');
-
+*/
 // Start QuickStart here
-
+/*
 var OIDCStrategy = require('passport-azure-ad').OIDCStrategy;
 
 var log = bunyan.createLogger({
     name: 'Microsoft OIDC Example Web Application'
 });
-
+*/
 /******************************************************************************
  * Set up passport in the app 
  ******************************************************************************/
@@ -59,6 +60,7 @@ var log = bunyan.createLogger({
 // this will be as simple as storing the user ID when serializing, and finding
 // the user by ID when deserializing.
 //-----------------------------------------------------------------------------
+/*
 passport.serializeUser(function(user, done) {
   done(null, user.oid);
 });
@@ -82,7 +84,7 @@ var findByOid = function(oid, fn) {
   }
   return fn(null, null);
 };
-
+*/
 //-----------------------------------------------------------------------------
 // Use the OIDCStrategy within Passport.
 // 
@@ -100,6 +102,7 @@ var findByOid = function(oid, fn) {
 //
 // To do prototype (6), passReqToCallback must be set to true in the config.
 //-----------------------------------------------------------------------------
+/*
 passport.use(new OIDCStrategy({
     identityMetadata: config.creds.identityMetadata,
     clientID: config.creds.clientID,
@@ -141,17 +144,75 @@ passport.use(new OIDCStrategy({
   }
 ));
 
-
+*/
 //-----------------------------------------------------------------------------
 // Config the app, include middlewares
 //-----------------------------------------------------------------------------
 var app = express();
 
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(bodyParser.raw());
+/*
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.use(express.logger());
 app.use(methodOverride());
 app.use(cookieParser());
+*/
+// curl  -H "Content-Type: application/json"  -X GET http://localhost:3000/api/values?name=titi
+app.get('/api/values', function (req, res) {
+  try
+  {
+  console.log('name: ', req.query.name);
+  var response = {'testresponse': ''};
+  response.testresponse = req.query.name;
+  res.writeHead(200, {'content-type': 'application/json'});
+  res.end(JSON.stringify(response));
+  }
+  catch(err)
+  {
+      res.writeHead(400, {'content-type': 'application/json'});
+      res.end(JSON.stringify(err));
+  
+  }
+
+  //    res.send('Hello World!\n')
+})
+
+// curl -d "{\"name\":\"0123456789\"}" -H "Content-Type: application/json"  -X POST http://localhost:3000/api/values
+app.post('/api/values', function (req, res) {
+ // var obj = JSON.parse(req.body);
+ // var response = {'testresponse': ''};
+ // response.testresponse = obj.name;
+ // res.send(response.toString());
+ try
+ {
+ console.log('Got body:', req.body);
+ var response = {'testresponse': ''};
+ response.testresponse = req.body.name;
+ res.writeHead(200, {'content-type': 'application/json'});
+ res.end(JSON.stringify(response));
+
+}
+catch(err)
+{
+  res.writeHead(400, {'content-type': 'application/json'});
+  res.end(JSON.stringify(err));
+
+}
+
+})
+/*
+var port = normalizePort(process.env.PORT || 3000);
+app.set('port',port);
+// Export server for testing.
+var server = app.listen(port);
+module.exports = server;
+*/
+module.exports = app;
+
+/*
 
 // set up session middleware
 if (config.useMongoDBSessionStore) {
@@ -281,5 +342,6 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error',{ message: err.message });
 });
+*/
 console.log('#########################################Starting-env: ', process.env);
 module.exports = app;
